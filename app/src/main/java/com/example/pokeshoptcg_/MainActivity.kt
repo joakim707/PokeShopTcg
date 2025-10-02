@@ -1,47 +1,32 @@
 package com.example.pokeshoptcg_
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.pokeshoptcg_.ui.theme.PokeShopTcg_Theme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.button.MaterialButton
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            PokeShopTcg_Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        // Récupérer le NavController
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        // Configuration des boutons de navigation
+        findViewById<MaterialButton>(R.id.btnHome).setOnClickListener {
+            navController.navigate(R.id.homeFragment)
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+        findViewById<MaterialButton>(R.id.btnProduct).setOnClickListener {
+            navController.navigate(R.id.productFragment)
+        }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PokeShopTcg_Theme {
-        Greeting("Android")
+        findViewById<MaterialButton>(R.id.btnFavorite).setOnClickListener {
+            navController.navigate(R.id.favoriteFragment)
+        }
     }
 }
