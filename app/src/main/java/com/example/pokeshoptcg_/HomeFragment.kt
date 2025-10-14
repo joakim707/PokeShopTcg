@@ -7,96 +7,58 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pokeshoptcg_.data.model.PokemonCard
-import com.example.pokeshoptcg_.data.model.PokemonResponse
-import com.example.pokeshoptcg_.data.remote.RetrofitInstance
+import com.example.pokeshoptcg_.R
 import com.example.pokeshoptcg_.ui.adapter.ProductAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.pokeshoptcg_.viewmodel.HomeViewModel
+import com.example.pokeshoptcg_.util.Result
 
 class HomeFragment : Fragment() {
 
-    private var recyclerView: RecyclerView? = null
-    private var progressBar: ProgressBar? = null
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var viewModel: HomeViewModel
+    private var progressBar: ProgressBar? = null
+    private var recyclerView: RecyclerView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Assure-toi que le nom du layout correspond (home_fragment.xml)
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView = view.findViewById(R.id.recyclerViewProducts)
         progressBar = view.findViewById(R.id.progressBar)
+        recyclerView = view.findViewById(R.id.recyclerViewProducts)
 
-        // setup RecyclerView
         recyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
         productAdapter = ProductAdapter(mutableListOf())
         recyclerView?.adapter = productAdapter
 
-        // Lancer le chargement
-        fetchPokemonCards()
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        // Observer LiveData
+        viewModel.cards.observe(viewLifecycleOwner) { result ->
+            progressBar?.visibility = View.GONE
+            when (result) {
+                is Result.Success -> productAdapter.updateProducts(result.data)
+                is Result.Error -> Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        // Lancer fetch
+        progressBar?.visibility = View.VISIBLE
+        viewModel.fetchCardsWithRetry()
     }
 
     override fun onDestroyView() {
-        // éviter fuite de view references
         recyclerView = null
         progressBar = null
         super.onDestroyView()
-    }
-
-    private fun showLoading(show: Boolean) {
-        // safe access : use view lifecycle references
-        progressBar?.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    private fun fetchPokemonCards() {
-        // Afficher loader
-        showLoading(true)
-
-        // Appel Retrofit (asynchrone)
-        RetrofitInstance.api.getCards().enqueue(object : Callback<PokemonResponse> {
-            override fun onResponse(call: Call<PokemonResponse>, response: Response<PokemonResponse>) {
-                // Le fragment peut avoir été détaché — on vérifie
-                if (!isAdded) {
-                    showLoading(false)
-                    return
-                }
-
-                showLoading(false)
-
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    val cards: List<PokemonCard> = body?.data ?: emptyList()
-
-                    // Mettre à jour l'adapter en toute sécurité
-                    productAdapter.updateProducts(cards)
-                } else {
-                    // Message d'erreur convivial
-                    context?.let {
-                        Toast.makeText(it, "Erreur API: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
-                // Le fragment peut avoir été détaché — on vérifie
-                if (!isAdded) return
-
-                showLoading(false)
-                context?.let {
-                    Toast.makeText(it, "Erreur réseau : ${t.message}", Toast.LENGTH_LONG).show()
-                }
-            }
-        })
     }
 }

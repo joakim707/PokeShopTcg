@@ -7,23 +7,21 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
 
-    // ✅ Créer un client OkHttp avec l'intercepteur pour la clé API
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("X-Api-Key", "d44c2a62-ed76-43a3-863d-906bce21505c") // <- Remplace par ta clé réelle
+                .addHeader("X-Api-Key", "d44c2a62-ed76-43a3-863d-906bce21505c") // <- remplace par ta clé API
                 .build()
             chain.proceed(request)
         }
-        .connectTimeout(30, TimeUnit.SECONDS)  // Timeout connexion
-        .readTimeout(30, TimeUnit.SECONDS)     // Timeout lecture
-        .writeTimeout(30, TimeUnit.SECONDS)    // Timeout écriture
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
-    // Retrofit avec ce client
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://api.pokemontcg.io/v2/")
+            .baseUrl("https://api.pokemontcg.io/v2/") // slash final obligatoire
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
