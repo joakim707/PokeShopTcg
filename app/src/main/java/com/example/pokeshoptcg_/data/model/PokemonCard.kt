@@ -1,27 +1,23 @@
 package com.example.pokeshoptcg_.data.model
 
-data class PokemonResponse(
-    val data: List<PokemonCard>
-)
-
 data class PokemonCard(
     val id: String,
-    val name: String,
+    val name: String?,
     val types: List<String>?,
     val rarity: String?,
-    val cardmarket: CardMarket?,
-    val images: PokemonImages
+    val images: Images,
+    val cardmarket: CardMarket?
 )
 
-data class PokemonImages(
+data class Images(
     val small: String,
     val large: String
 )
 
 data class CardMarket(
-    val prices: CardPrices?
+    val prices: Prices?
 )
 
-data class CardPrices(
+data class Prices(
     val averageSellPrice: Double?
 )

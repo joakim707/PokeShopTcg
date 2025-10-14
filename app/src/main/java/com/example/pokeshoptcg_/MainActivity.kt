@@ -2,8 +2,11 @@ package com.example.pokeshoptcg_
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.button.MaterialButton
+import androidx.fragment.app.Fragment
+import com.example.pokeshoptcg_.R
+import com.example.pokeshoptcg_.ui.fragment.FavoriteFragment
+import com.example.pokeshoptcg_.ui.fragment.HomeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,22 +14,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Récupérer le NavController
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        val homeFragment = HomeFragment()
+        val favoriteFragment = FavoriteFragment()
 
-        // Configuration des boutons de navigation
-        findViewById<MaterialButton>(R.id.btnHome).setOnClickListener {
-            navController.navigate(R.id.homeFragment)
-        }
+        setCurrentFragment(homeFragment)
 
-        findViewById<MaterialButton>(R.id.btnProduct).setOnClickListener {
-            navController.navigate(R.id.productFragment)
+        val navView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        navView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_home -> setCurrentFragment(homeFragment)
+                R.id.menu_favorite -> setCurrentFragment(favoriteFragment)
+            }
+            true
         }
+    }
 
-        findViewById<MaterialButton>(R.id.btnFavorite).setOnClickListener {
-            navController.navigate(R.id.favoriteFragment)
-        }
+    private fun setCurrentFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }
