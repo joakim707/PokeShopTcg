@@ -5,51 +5,78 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
         android:padding="8dp">
 
-        <!-- Image Pokémon -->
-        <ImageView
-            android:id="@+id/imageProduct"
+        <!-- Image + bouton favori -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:layout_height="240dp">
 
-        <!-- Nom -->
+            <ImageView
+                android:id="@+id/imageProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true" />
+
+            <ImageButton
+                android:id="@+id/buttonFavorite"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end|top"
+                android:layout_margin="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@android:color/holo_red_light"
+                android:src="@drawable/ic_favorite_border" />
+        </FrameLayout>
+
+        <!-- Nom du Pokémon -->
         <TextView
             android:id="@+id/textProductName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Nom Pokémon"
+            android:text="Nom du Pokémon"
+            android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold" />
+
+        <!-- Type -->
+        <TextView
+            android:id="@+id/textProductType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Type: Électrik"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <!-- Rareté -->
+        <TextView
+            android:id="@+id/textProductRarity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rareté: Rare Holo"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
 
         <!-- Prix -->
         <TextView
             android:id="@+id/textProductPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="€9.99"
+            android:text="Prix moyen : €3.50"
+            android:textAlignment="center"
+            android:textSize="14sp"
             android:textColor="@android:color/holo_green_dark"
-            android:layout_marginTop="4dp" />
-
-        <!-- Icône Favori -->
-        <ImageButton
-            android:id="@+id/buttonFavorite"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/btn_star_big_off"
-            android:contentDescription="Ajouter aux favoris" />
+            android:layout_marginBottom="8dp" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

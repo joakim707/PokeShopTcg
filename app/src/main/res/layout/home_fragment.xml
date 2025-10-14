@@ -3,11 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Zone d’affichage des cartes Pokémon -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp"
+        android:clipToPadding="false"
         android:scrollbars="vertical" />
+
+    <!-- (Optionnel) Loader pendant le chargement -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </FrameLayout>
