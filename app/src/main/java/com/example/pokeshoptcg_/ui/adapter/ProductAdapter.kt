@@ -9,10 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pokeshoptcg_.R
-import com.example.pokeshoptcg_.data.model.PokemonCard
+import com.example.pokeshoptcg_.data.db.PokemonCardEntity
 
 class ProductAdapter(
-    private val products: MutableList<PokemonCard>
+    private val products: MutableList<PokemonCardEntity>,
+    private val onFavoriteClick: (PokemonCardEntity) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,43 +34,24 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val card = products[position]
 
-        // safe image load (coil) — use large if present otherwise small
-        val imageUrl = card.images.large.ifEmpty { card.images.small }
-        holder.imageProduct.load(imageUrl) {
-            placeholder(R.drawable.ic_launcher_foreground)
-            crossfade(true)
-        }
+        holder.imageProduct.load(card.imageUrl)
+        holder.textName.text = card.name
+        holder.textType.text = "Type : ${card.type ?: "Inconnu"}"
+        holder.textRarity.text = "Rareté : ${card.rarity ?: "N/A"}"
+        holder.textPrice.text = "Prix : ${card.price ?: 0.0}€"
 
-        holder.textName.text = card.name ?: "Unknown"
-        holder.textType.text = "Type : ${card.types?.joinToString(", ") ?: "Inconnu"}"
-        holder.textRarity.text = "Rareté : ${card.rarity ?: "Non spécifiée"}"
-
-        val avgPrice = card.cardmarket?.prices?.averageSellPrice
-        holder.textPrice.text = if (avgPrice != null) "Prix moyen : €${String.format("%.2f", avgPrice)}" else "Prix moyen : N/A"
-
-        // Favori : on peut stocker l'état via tag (simple) ou gérer un champ isFavorite si tu veux persister
-        val isFav = holder.buttonFavorite.tag as? Boolean ?: false
-        holder.buttonFavorite.setImageResource(if (isFav) R.drawable.ic_favorite else R.drawable.ic_favorite_border)
+        holder.buttonFavorite.setImageResource(
+            if (card.isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+        )
 
         holder.buttonFavorite.setOnClickListener {
-            val newFav = !(holder.buttonFavorite.tag as? Boolean ?: false)
-            holder.buttonFavorite.tag = newFav
-            holder.buttonFavorite.setImageResource(if (newFav) R.drawable.ic_favorite else R.drawable.ic_favorite_border)
-
-            // Optionnel : ajouter animation "pop"
-            holder.buttonFavorite.animate().scaleX(1.2f).scaleY(1.2f).setDuration(120)
-                .withEndAction {
-                    holder.buttonFavorite.animate().scaleX(1f).scaleY(1f).start()
-                }.start()
+            onFavoriteClick(card)
         }
-
-        // Optionnel : clique sur la carte pour ouvrir détails (non implémenté ici)
     }
 
     override fun getItemCount(): Int = products.size
 
-    // Méthode utile pour mettre à jour les données depuis le fragment
-    fun updateProducts(newProducts: List<PokemonCard>) {
+    fun updateProducts(newProducts: List<PokemonCardEntity>) {
         products.clear()
         products.addAll(newProducts)
         notifyDataSetChanged()
