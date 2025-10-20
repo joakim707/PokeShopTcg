@@ -20,4 +20,8 @@ interface PokemonCardDao {
 
     @Query("DELETE FROM pokemon_cards")
     suspend fun clearAll()
+
+    @Query("SELECT * FROM pokemon_cards WHERE name LIKE '%' || :query || '%' ORDER BY name ASC")
+    fun searchCards(query: String): LiveData<List<PokemonCardEntity>>
+
 }

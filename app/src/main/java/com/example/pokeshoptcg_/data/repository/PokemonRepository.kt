@@ -1,6 +1,7 @@
 package com.example.pokeshoptcg_.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.pokeshoptcg_.data.db.PokemonCardDao
 import com.example.pokeshoptcg_.data.db.PokemonCardEntity
 import com.example.pokeshoptcg_.data.model.PokemonCard
@@ -69,4 +70,9 @@ class PokemonRepository(private val dao: PokemonCardDao) {
             dao.update(card)
         }
     }
+
+    fun searchCards(query: String): LiveData<List<PokemonCardEntity>> {
+        return dao.searchCards(query)
+    }
+
 }
