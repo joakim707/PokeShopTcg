@@ -13,7 +13,8 @@ import com.example.pokeshoptcg_.data.db.PokemonCardEntity
 
 class ProductAdapter(
     private val products: MutableList<PokemonCardEntity>,
-    private val onFavoriteClick: (PokemonCardEntity) -> Unit
+    private val onFavoriteClick: (PokemonCardEntity) -> Unit,
+    private val onItemClick: (PokemonCardEntity) -> Unit            // <— ajouté
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -43,10 +44,10 @@ class ProductAdapter(
         holder.buttonFavorite.setImageResource(
             if (card.isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
         )
+        holder.buttonFavorite.setOnClickListener { onFavoriteClick(card) }
 
-        holder.buttonFavorite.setOnClickListener {
-            onFavoriteClick(card)
-        }
+        // ↓↓↓ clic sur toute la carte => ouvre le détail
+        holder.itemView.setOnClickListener { onItemClick(card) }
     }
 
     override fun getItemCount(): Int = products.size
