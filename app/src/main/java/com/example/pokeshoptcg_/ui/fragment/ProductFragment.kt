@@ -68,15 +68,6 @@ class ProductFragment : Fragment() {
             String.format(Locale.US, "~ %.2f $", it)
         } ?: getString(R.string.price_na)
 
-        // Numéro
-        binding.tvNumber.text = product.number?.let {
-            getString(R.string.num_fmt, it)
-        } ?: getString(R.string.num_na)
-
-        // Favoris (à brancher à Room/ViewModel plus tard)
-        binding.btnFavorite.setOnClickListener {
-            binding.btnFavorite.text = getString(R.string.favorited_ok)
-        }
     }
 
     override fun onDestroyView() {

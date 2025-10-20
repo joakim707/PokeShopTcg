@@ -6,7 +6,8 @@
 
     <EditText
         android:id="@+id/searchBar"
-        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_width="385dp"
         android:layout_height="48dp"
         android:hint="Rechercher une carte..."
         android:padding="12dp"
