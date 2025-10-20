@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PokeShopTcg_</string>
+    <string name="unknown">Inconnu</string>
+    <string name="price_na">Prix indisponible</string>
+    <string name="num_fmt">N° %1$s</string>
+    <string name="num_na">N° —</string>
+    <string name="favorited_ok">Ajouté ✓</string>
 </resources>
