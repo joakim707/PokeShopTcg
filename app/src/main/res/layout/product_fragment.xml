@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,9 +34,9 @@
                 android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:paddingTop="12dp"
                 android:textSize="20sp"
-                android:paddingTop="12dp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvSetRarity"
@@ -48,8 +48,8 @@
                 android:id="@+id/chipsTypes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:singleLine="true"
-                android:paddingTop="8dp" />
+                android:paddingTop="8dp"
+                app:singleLine="true" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -61,21 +61,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/tvPrice"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textStyle="bold"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnFavorite"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:text="Ajouter aux favoris" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ajouter aux favoris"
+                        style="@style/Widget.Material3.Button.TonalButton" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
