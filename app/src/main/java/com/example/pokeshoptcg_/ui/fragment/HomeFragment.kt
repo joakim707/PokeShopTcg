@@ -31,7 +31,28 @@ class HomeFragment : Fragment() {
         searchBar = view.findViewById(R.id.searchBar)
         typeSpinner = view.findViewById(R.id.typeSpinner)
 
-        adapter = ProductAdapter(mutableListOf()) { card -> viewModel.toggleFavorite(card) }
+        adapter = ProductAdapter(
+            products = mutableListOf(),
+            onFavoriteClick = { card -> viewModel.toggleFavorite(card) },
+            onItemClick = { card ->
+                // Map PokemonCardEntity -> ProductUi
+                val ui = ProductUi(
+                    id = card.id,
+                    name = card.name ?: "Sans nom",   // <- évite l’erreur String? -> String
+                    imageUrl = card.imageUrl,
+                    setName = null,                   // <- pas dans l’entity
+                    rarity = card.rarity,
+                    number = null,                    // <- pas dans l’entity
+                    types = card.type?.let { listOf(it) } ?: emptyList(),
+                    marketPrice = card.price          // <- déjà Double?
+                )
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, ProductFragment.newInstance(ui)) // <- bon ID
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
+
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
 
