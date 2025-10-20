@@ -41,6 +41,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp" />
 
+    <!-- RecyclerView pour afficher les cartes en grille -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -48,6 +49,6 @@
         android:padding="8dp"
         android:clipToPadding="false"
         android:scrollbars="vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@id/filterContainer"/>
+        android:layout_marginBottom="8dp" />
+
 </RelativeLayout>
