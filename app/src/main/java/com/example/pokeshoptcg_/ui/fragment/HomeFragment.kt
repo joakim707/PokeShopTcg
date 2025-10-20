@@ -1,10 +1,9 @@
 package com.example.pokeshoptcg_.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.view.*
+import android.widget.*
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,42 +18,47 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var adapter: ProductAdapter
+    private lateinit var searchBar: EditText
+    private lateinit var typeSpinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.home_fragment, container, false)
+
         recyclerView = view.findViewById(R.id.recyclerView)
         progressBar = view.findViewById(R.id.progressBar)
+        searchBar = view.findViewById(R.id.searchBar)
+        typeSpinner = view.findViewById(R.id.typeSpinner)
 
-        adapter = ProductAdapter(
-            products = mutableListOf(),
-            onFavoriteClick = { card -> viewModel.toggleFavorite(card) },
-            onItemClick = { card ->
-                // Map PokemonCardEntity -> ProductUi
-                val ui = ProductUi(
-                    id = card.id,
-                    name = card.name ?: "Sans nom",   // <- évite l’erreur String? -> String
-                    imageUrl = card.imageUrl,
-                    setName = null,                   // <- pas dans l’entity
-                    rarity = card.rarity,
-                    number = null,                    // <- pas dans l’entity
-                    types = card.type?.let { listOf(it) } ?: emptyList(),
-                    marketPrice = card.price          // <- déjà Double?
-                )
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, ProductFragment.newInstance(ui)) // <- bon ID
-                    .addToBackStack(null)
-                    .commit()
-            }
-        )
-
+        adapter = ProductAdapter(mutableListOf()) { card -> viewModel.toggleFavorite(card) }
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
 
-        viewModel.cards.observe(viewLifecycleOwner) { adapter.updateProducts(it) }
+        // Observe filtered cards
+        viewModel.filteredCards.observe(viewLifecycleOwner) { adapter.updateProducts(it) }
+
+        // ProgressBar
         viewModel.isLoading.observe(viewLifecycleOwner) {
             progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
+        // SearchBar text change
+        searchBar.doOnTextChanged { text, _, _, _ ->
+            viewModel.setSearchQuery(text.toString())
+        }
+
+        // Spinner setup
+        val types = listOf("All", "Fire", "Water", "Grass", "Lightning", "Psychic", "Fighting", "Metal", "Fairy", "Dragon", "Dark", "Colorless")
+        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, types)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = spinnerAdapter
+        typeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selected = types[position]
+                viewModel.setSelectedType(selected)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         return view
