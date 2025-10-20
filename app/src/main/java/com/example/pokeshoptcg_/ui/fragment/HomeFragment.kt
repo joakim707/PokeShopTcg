@@ -52,7 +52,10 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
 
-        viewModel.cards.observe(viewLifecycleOwner) { adapter.updateProducts(it) }
+        // Observe filtered cards 
+        viewModel.filteredCards.observe(viewLifecycleOwner) { adapter.updateProducts(it) }
+
+        // ProgressBar
         viewModel.isLoading.observe(viewLifecycleOwner) {
             progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
