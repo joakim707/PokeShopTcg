@@ -3,20 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorSurface"
-        app:title="Détail du produit" />
+        app:title="Détail du produit"
+        app:titleTextColor="@android:color/black"
+        app:navigationIconTint="@android:color/black" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:padding="16dp"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -24,45 +28,74 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ivImage"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/tvName"
+            <!-- Image de la carte -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                app:cardCornerRadius="12dp"
+                app:cardElevation="8dp"
+                android:layout_marginBottom="16dp">
 
-            <TextView
-                android:id="@+id/tvSetRarity"
+                <ImageView
+                    android:id="@+id/ivImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="@string/unknown" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Nom + Set + Rareté -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="2dp" />
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingBottom="12dp">
 
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/tvSetRarity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:textAlignment="center"
+                    android:paddingTop="4dp"/>
+            </LinearLayout>
+
+            <!-- Types -->
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipsTypes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                app:singleLine="true" />
+                android:paddingBottom="16dp"
+                app:singleLine="true"
+                app:chipSpacing="8dp" />
 
+            <!-- Carte prix + bouton favoris -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardElevation="1dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/tvPrice"
@@ -70,22 +103,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@android:color/holo_green_dark" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnFavorite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ajouter aux favoris"
-                        style="@style/Widget.Material3.Button.TonalButton" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tvNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp" />
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
