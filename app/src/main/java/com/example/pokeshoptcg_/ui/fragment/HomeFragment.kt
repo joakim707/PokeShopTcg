@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
 
-        // Observe filtered cards
+        // Observe filtered cards 
         viewModel.filteredCards.observe(viewLifecycleOwner) { adapter.updateProducts(it) }
 
         // ProgressBar
